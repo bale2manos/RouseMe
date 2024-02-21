@@ -41,7 +41,7 @@ function playSound(soundFile, volume) {
   console.log('NUEVA CANCION');
   const audio = new Audio(soundFile);
   audio.loop= true;
-  if (soundFile == 'hidden-gem.mp3'){
+  if (soundFile == './music/hidden-gem.mp3'){
     audio.loop = false;
   }
   audio.volume = volume;
@@ -317,7 +317,6 @@ function closeDndPopup() {
     }
   
   document.getElementById('resetButton').style.display = 'block';
-  destinationBanner.style.display = 'block';
   document.getElementById('homeButton').style.display = 'block';
   
 
@@ -345,7 +344,7 @@ function vibrateIfCloseToDestination(userLat, userLng, destLat, destLng, thresho
       }, 900);
     }
     if (!audioPlaying) {
-      playSound('sound1.mp3', 1);
+      playSound('./music/sound1.mp3', 1);
     }
     showSwipeInfo('Good morning! Swipe with three fingers to the right to mute the app!!');
     return;
@@ -363,7 +362,7 @@ function vibrateIfCloseToDestination(userLat, userLng, destLat, destLng, thresho
       }, 700);
     }
     if (!audioPlaying) {
-      playSound('sound.mp3', 0.2);
+      playSound('./music/sound.mp3', 0.2);
     }
     showSwipeInfo('¡Buenos días! Arrastra con tres dedos de izquierda a derecha para silenciar la alarma!!')
     return;
@@ -502,7 +501,7 @@ function resetDestination() {
   finishTrip();
   if (resetCounter >= 33){
     showAlert('¿Te vas a decidir de una maldita vez? Llevas más de 33 intentos');
-    if (!audioPlaying){playSound('hidden-gem.mp3', 1)}
+    if (!audioPlaying){playSound('./music/hidden-gem.mp3', 1)}
   }
 }
 
