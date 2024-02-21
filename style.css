@@ -1,0 +1,164 @@
+/* ******************************************************* 
+************************* GENERAL ************************
+**********************************************************/
+html,
+body,
+#sample_map {
+  height: 100%;
+  margin: 0; 
+  overflow: hidden; 
+}
+
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  
+}
+
+/* ******************************************************* 
+************************** MAPA **************************
+**********************************************************/
+
+#sample_map{
+  height:100%;
+}
+
+/* ******************************************************* 
+************************* BOTONES ************************
+**********************************************************/
+#resetButton {
+  position: absolute;
+  top: 1vh;
+  right: 2vw;
+  padding: 10px;
+  z-index: 400;
+  background-color: darkred;
+  display: none;
+}
+
+#resetButton:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+
+#homeButton {
+  position: absolute;
+  top: 1vh;
+  left: 50px;
+  padding: 10px;
+  z-index: 400;
+  background-color: #7A2E53;
+  display: none;
+}
+
+#resetButton:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+
+button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+
+/* ******************************************************* 
+************************** POPUP *************************
+**********************************************************/
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.transport{
+  flex-direction: row;
+}
+
+
+.popup-info {
+  display: flex;
+  background-color: #fff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+}
+
+.transport button{
+  background-color: #7A2E53;
+}
+
+
+/* ******************************************************* 
+********************* DROPDOWN DESTINO *******************
+**********************************************************/
+
+
+
+#location-dropdown {
+  width : 100%; 
+  background: #d9d9d9;
+  margin : 2vmin auto; 
+}
+
+#dropdown-header {
+  padding : 2vh;
+  background : #7A2E53; 
+  color : white;
+  font-size : 1.2em;
+  font-variant : small-caps;
+  cursor : pointer;
+  display: block;
+}
+
+#arrow {
+  float: right;
+  right: 5%;
+  content: "+";
+}
+
+.slide {
+  clear:both;
+  padding:0;
+  height:0px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  text-align: center;
+  transition: height .4s ease;
+  list-style-type: none;
+}
+
+.slide::-webkit-scrollbar {
+  display: none;
+}
+
+.slide li {
+  padding : 4vh;
+  cursor: pointer;
+}
+.slide li:hover {
+  background : #c76092; 
+  color : white;
+}
+
+#touch {position: absolute; opacity: 0; height: 0px;}    
+
+#touch:checked + .slide {height: 300px;} 
