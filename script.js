@@ -13,6 +13,7 @@ let touchEndX = 0;
 let awaken = true;
 let destination_set = false;
 let audioPlaying = false;
+let resetCounter = 0;
 let destinationMarker; 
 let greenArea;
 let redArea;
@@ -40,6 +41,9 @@ function playSound(soundFile, volume) {
   console.log('NUEVA CANCION');
   const audio = new Audio(soundFile);
   audio.loop= true;
+  if (soundFile == 'hidden-gem.mp3'){
+    audio.loop = false;
+  }
   audio.volume = volume;
   audio.play();
   audioPlaying = true;
@@ -184,7 +188,7 @@ function showAlert(message) {
     title: message,
     position: 'top',
     showConfirmButton: false,
-    timer: 1000, 
+    timer: 2000, 
     toast: true,
     background: '#fffff', 
   });
@@ -494,7 +498,12 @@ function resetDestination() {
     mymap.removeLayer(destinationMarker);
   }
   document.getElementById('destination-banner').style.display = 'none';
+  resetCounter += 1;
   finishTrip();
+  if (resetCounter >= 33){
+    showAlert('¿Te vas a decidir de una maldita vez? Llevas más de 33 intentos');
+    if (!audioPlaying){playSound('hidden-gem.mp3', 1)}
+  }
 }
 
 function silenceEverything() {
@@ -504,13 +513,12 @@ function silenceEverything() {
     vibrationInterval = null;
   }
   stopSound();
-  Swal.close();
+  if (resetCounter < 33) {Swal.close();}
 }
 
 function finishTrip(){
   silenceEverything();
   awaken = true;
 }
-
 
 
