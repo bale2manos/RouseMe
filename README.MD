@@ -20,7 +20,7 @@ RouseMe es una aplicación web diseñada para ayudarte a despertarte suavemente 
 3. Abre el enlace proporcionado en una nueva pestaña en tu dispositivo de despertador.
 4. ¡Disfruta de despertarte suavemente!
 
-### 2. Autohospedaje
+### 2. Autohost
 
 1. Clona este repositorio.
 2. Configura un servidor web (por ejemplo, Node.js con Express).
