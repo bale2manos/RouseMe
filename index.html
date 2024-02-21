@@ -21,25 +21,25 @@
             <span id="destination">Destino</span>
             <span id="arrow"></span>
           </label>
-            
-          <input type="checkbox" id="touch"> 
-          
+
+          <input type="checkbox" id="touch">
+
           <ul class="slide">
             <li value="unknown" data-lat="0" data-lon="0">
               Selecciona en el mapa</li>
-            <li value="Aranjuez" data-lat="40.03468" data-lon="-3.61847">
+            <li data-lat="40.03468" data-lon="-3.61847">
               Aranjuez - Renfe</li>
-            <li value="ElCasar" data-lat="40.31813" data-lon="-3.70970">
+            <li data-lat="40.31813" data-lon="-3.70970">
               El Casar - Renfe/Metro</li>
-            <li value="LeganesCentral" data-lat="40.33023" data-lon="-3.76848">
+            <li data-lat="40.33023" data-lon="-3.76848">
               Leganés Central - Renfe/Metro</li>
-            <li value="Atocha" data-lat="40.40530" data-lon="-3.68876">
+            <li data-lat="40.40530" data-lon="-3.68876">
               Atocha - Renfe/Metro</li>
           </ul>
         </nav>
       </div>
-      
-      
+
+
       <div class="transport">
         <button onclick="closePopup('Tren')">Tren 🚆</button>
         <button onclick="closePopup('Metro')">Metro 🚇</button>
@@ -50,15 +50,16 @@
 
   <!-- Mapa -->
   <div id="sample_map"></div>
-  
+
   <!-- Botones en el mapa -->
   <button id="resetButton" onclick="resetDestination()">RESET</button>
   <button id="homeButton" onclick="reloadPage()">HOME</button>
+  <div id="destination-banner">DESTINO: </div>
 
   <!-- Librería del mapa -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin="">
-  </script>
+    </script>
   <script src="script.js"></script>
   <!-- Libreria para el scrollbar -->
   <link rel="stylesheet" href="https://unpkg.com/simplebar@5.3.4/dist/simplebar.min.css">

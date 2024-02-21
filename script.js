@@ -84,6 +84,7 @@ function handleTouchEnd() {
     finishTrip();
     resetDestination();
     document.getElementById('resetButton').style.display = 'none';
+    document.getElementById('destination-banner').style.display = 'none';
     document.getElementById('homeButton').style.display = 'none';
     successfulMessage();
     
@@ -304,7 +305,15 @@ function closeDndPopup() {
     const userLng = position.coords.longitude;
     initializeMap(userLat, userLng);
   });
+  
+  const destinationBanner = document.getElementById('destination-banner');
+  if (destination.name != 'Selecciona en el mapa'){
+    destinationBanner.textContent += destination.name;
+    destinationBanner.style.display = 'block';
+    }
+  
   document.getElementById('resetButton').style.display = 'block';
+  destinationBanner.style.display = 'block';
   document.getElementById('homeButton').style.display = 'block';
   
 
@@ -484,7 +493,8 @@ function resetDestination() {
   if (destinationMarker) {
     mymap.removeLayer(destinationMarker);
   }
-    finishTrip();
+  document.getElementById('destination-banner').style.display = 'none';
+  finishTrip();
 }
 
 function silenceEverything() {
