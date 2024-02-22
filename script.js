@@ -14,7 +14,9 @@ let awaken = true;
 let destination_set = false;
 let audioPlaying = false;
 let resetCounter = 0;
+let notificationDelay=1000;
 let destinationMarker; 
+let activeNotification;
 let greenArea;
 let redArea;
 let mymap;
@@ -34,7 +36,7 @@ function reloadPage() {
 
 
 // *****************************************************************
-// 2. Audio
+// 2. Audio and notification
 // *****************************************************************
 
 function playSound(soundFile, volume) {
@@ -60,6 +62,42 @@ function stopSound() {
     currentAudio.pause();
     currentAudio.currentTime = 0; 
     audioPlaying = false;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  if ('Notification' in window) {
+    Notification.requestPermission().then(function (permission) {
+      if (permission === 'granted') {
+        console.log('Permiso para notificacr');
+      } else {
+        console.warn('Permiso para notificar denegado');
+      }
+    });
+  }
+});
+
+function sendNotification(message, vibrationPattern) {
+  if ('Notification' in window) {
+    if (activeNotification) {
+      activeNotification.close(); // Close the currently active notification
+    }
+
+    setTimeout(function () {
+      const notification = new Notification('RouseMe', {
+        body: message,
+      });
+
+      activeNotification = notification;
+
+      notification.addEventListener('close', function () {
+        activeNotification = null;
+      });
+
+      if (vibrationPattern) {
+        navigator.vibrate(vibrationPattern);
+      }
+    }, notificationDelay);
   }
 }
 
@@ -284,7 +322,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // SECOND POPUP
 function showDndPopup() {
-  
   Swal.fire({
     icon: 'warning',
     title: 'Desactiva el modo No Molestar, desilencia el dispositivo y activa la vibración',
@@ -297,30 +334,62 @@ function showDndPopup() {
       }, 200);
     }
   });
-
-
-  
 }
 
 function closeDndPopup() {
-  document.getElementById('overlay').style.display = 'none';
-  navigator.geolocation.getCurrentPosition(function (position) {
-    const userLat = position.coords.latitude;
-    const userLng = position.coords.longitude;
-    initializeMap(userLat, userLng);
-  });
-  
-  const destinationBanner = document.getElementById('destination-banner');
-  if (destination.name != 'Selecciona en el mapa'){
-    destinationBanner.textContent += destination.name;
-    destinationBanner.style.display = 'block';
-    }
-  
-  document.getElementById('resetButton').style.display = 'block';
-  document.getElementById('homeButton').style.display = 'block';
-  
-
+  askUserKeepScreenAwake();
 }
+
+function askUserKeepScreenAwake() {
+  Swal.fire({
+    icon: 'question',
+    title: '¿Quieres mantener la pantalla encendida para asegurar que suene la alarma correctamente?',
+    showCancelButton: true,
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'No',
+    reverseButtons: true,
+    showCloseButton: false,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if ('wakeLock' in navigator) {
+        navigator.wakeLock.request('screen').then(() => {
+          console.log('Screen wake lock adquirido:');
+          openFinalScreen(); 
+        }).catch((error) => {
+          console.error('Error adquiriendo screen wake lock:', error);
+          openFinalScreen(); 
+        });
+      } else {
+        console.warn('No hay screen lock');
+        openFinalScreen(); 
+      }
+    } else {
+      console.warn('El usuario no quiere screen lock');
+      openFinalScreen(); 
+    }
+  });
+}
+
+function openFinalScreen() {
+  setTimeout(() => {
+    document.getElementById('overlay').style.display = 'none';
+    navigator.geolocation.getCurrentPosition(function (position) {
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+      initializeMap(userLat, userLng);
+    });
+
+    const destinationBanner = document.getElementById('destination-banner');
+    if (destination.name !== 'Selecciona en el mapa') {
+      destinationBanner.textContent += destination.name;
+      destinationBanner.style.display = 'block';
+    }
+
+    document.getElementById('resetButton').style.display = 'block';
+    document.getElementById('homeButton').style.display = 'block';
+  }, 300);
+}
+
 
 
 // *****************************************************************
@@ -329,24 +398,24 @@ function closeDndPopup() {
 
 function vibrateIfCloseToDestination(userLat, userLng, destLat, destLng, threshold1, threshold2) {
   const distance = calculateDistance(userLat, userLng, destLat, destLng);
-  console.log(distance);
+
   if (distance <= threshold2) {
-    
     if (!estoyEnRojo){
       estoyEnRojo = true;
       estoyEnVerde=false;
-      silenceEverything();
-    }
-    
-    if (!vibrationInterval) {
-      vibrationInterval = setInterval(() => {
-        navigator.vibrate([800, 100]);
-      }, 900);
-    }
-    if (!audioPlaying) {
-      playSound('./music/sound1.mp3', 1);
-    }
-    showSwipeInfo('Good morning! Swipe with three fingers to the right to mute the app!!');
+      silenceEverything()
+        if (!vibrationInterval) {
+          vibrationInterval = setInterval(() => {
+            navigator.vibrate([800, 100]);
+          }, 900);
+        }
+        if (!audioPlaying) {
+          playSound('./music/sound1.mp3', 1);
+        }
+        showSwipeInfo('¡Buenos días! Arrastra con tres dedos de izquierda a derecha para silenciar la alarma!!');
+      sendNotification('¡Te quedan menos de 1 minuto y medio para llegar a tu destino!', [3000]);
+
+    }   
     return;
     }
  
@@ -354,17 +423,19 @@ function vibrateIfCloseToDestination(userLat, userLng, destLat, destLng, thresho
     if (!estoyEnVerde){
       estoyEnRojo = false;
       estoyEnVerde=true;
-      silenceEverything();
+      silenceEverything()
+      if (!vibrationInterval) {
+        vibrationInterval = setInterval(() => {
+          navigator.vibrate([600, 100]);
+        }, 700);
+      }
+      if (!audioPlaying) {
+        playSound('./music/sound.mp3', 0.6);
+      }
+      showSwipeInfo('¡Buenos días! Arrastra con tres dedos de izquierda a derecha para silenciar la alarma!!');
+      sendNotification('¡Te quedan menos de 3 minutos para llegar a tu destino!', [1000]);
     }
-    if (!vibrationInterval) {
-      vibrationInterval = setInterval(() => {
-        navigator.vibrate([600, 100]);
-      }, 700);
-    }
-    if (!audioPlaying) {
-      playSound('./music/sound.mp3', 0.2);
-    }
-    showSwipeInfo('¡Buenos días! Arrastra con tres dedos de izquierda a derecha para silenciar la alarma!!')
+    
     return;
   }
     estoyEnVerde=false;

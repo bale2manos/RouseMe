@@ -35,6 +35,26 @@ RouseMe utiliza las siguientes bibliotecas de terceros:
 * SweetAlert2: https://sweetalert2.github.io/
 * SimpleBar: https://simplebar.io/
 
-## Contribuir
+## Configuración adicional
 
-¡Siéntete libre de contribuir a RouseMe creando pull requests con nuevas funciones, correcciones de errores o mejoras!
+Para garantizar el correcto funcionamiento de la aplicación, ten en cuenta lo siguiente:
+
+### Permiso de Ubicación
+
+La aplicación utiliza la ubicación para ofrecerte alertas precisas y personalizadas. Asegúrate de permitir el acceso a la ubicación en tu dispositivo.
+
+### API Wake Lock
+
+Para evitar que la pantalla de tu dispositivo se apague mientras usas la aplicación, RouseMe utiliza la API Wake Lock. Esto asegura que puedas ver las alertas incluso si la pantalla está apagada. Asegúrate de que la aplicación tenga los permisos necesarios para utilizar esta API.
+
+### Notificaciones Push
+
+Para garantizar que te despiertes a tiempo, la aplicación utiliza notificaciones push. Asegúrate de habilitar las notificaciones y desactivar el modo No Molestar en tu dispositivo.
+
+## Guía de uso
+
+1. Selecciona tu destino o elige la opción de seleccionar en el mapa y haz clic cuando se muestre.
+2. Elige tu medio de transporte (tren, metro, autobús).
+3. Pulsa en 'Ok' en el popup que informa sobre la necesidad de desilenciar el móvil y desactivar el modo No Molestar.
+4. Decide si quieres mantener la pantalla del móvil encendida.
+5. ¡Disfruta de un despertar suave y puntual con RouseMe! 
