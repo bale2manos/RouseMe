@@ -80,26 +80,45 @@ document.addEventListener('DOMContentLoaded', function () {
 function sendNotification(message, vibrationPattern) {
   if ('Notification' in window) {
     if (activeNotification) {
-      activeNotification.close(); // Close the currently active notification
+      activeNotification.close();
     }
 
     setTimeout(function () {
-      const notification = new Notification('RouseMe', {
-        body: message,
-      });
+      if ('serviceWorker' in navigator && 'showNotification' in ServiceWorkerRegistration.prototype) {
+        navigator.serviceWorker.ready.then(function (registration) {
+          registration.showNotification('RouseMe', {
+            body: message,
+          });
 
-      activeNotification = notification;
+          if (vibrationPattern) {
+            navigator.vibrate(vibrationPattern);
+          }
+        });
+      } else {
 
-      notification.addEventListener('close', function () {
-        activeNotification = null;
-      });
+        // Para dispositivos que no dispongan de ServiceWorker
+        const notification = new Notification('RouseMe', {
+          body: message,
+        });
 
-      if (vibrationPattern) {
-        navigator.vibrate(vibrationPattern);
+        activeNotification = notification;
+
+        notification.addEventListener('close', function () {
+          activeNotification = null;
+        });
+
+        if (vibrationPattern) {
+          navigator.vibrate(vibrationPattern);
+        }
       }
     }, notificationDelay);
   }
 }
+
+
+
+
+
 
 
 // *****************************************************************
@@ -226,7 +245,7 @@ function showAlert(message) {
     title: message,
     position: 'top',
     showConfirmButton: false,
-    timer: 2000, 
+    timer: 3333, 
     toast: true,
     background: '#fffff', 
   });
@@ -324,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function showDndPopup() {
   Swal.fire({
     icon: 'warning',
-    title: 'Desactiva el modo No Molestar, desilencia el dispositivo y activa la vibración',
+    title: 'Desactiva el modo No Molestar, desilencia el dispositivo y activa la vibración.\n¡Activa las notificaciones para despertarte seguro!',
     confirmButtonText: 'Aceptar',
     confirmButtonColor: '#7A2E53',
   }).then((result) => {
@@ -438,9 +457,9 @@ function vibrateIfCloseToDestination(userLat, userLng, destLat, destLng, thresho
     
     return;
   }
-    estoyEnVerde=false;
+  estoyEnVerde=false;
   estoyEnRojo=false;
-  stopSound();
+  silenceEverything();
   Swal.close();
 }
 
